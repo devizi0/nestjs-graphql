@@ -1,0 +1,144 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuthPayload {
+  accessToken: String!
+  user: User!
+}
+
+type ChatRoom {
+  company: Company!
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+}
+
+type Company {
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  industry: String
+  logoUrl: String
+  name: String!
+  updatedAt: DateTime!
+  website: String
+}
+
+input CreateChatRoomInput {
+  companyId: ID!
+  name: String!
+}
+
+input CreateCompanyInput {
+  description: String
+  industry: String
+  logoUrl: String
+  name: String!
+  website: String
+}
+
+input CreateJobInput {
+  companyId: ID!
+  deadline: DateTime
+  description: String!
+  employmentType: String
+  location: String
+  salary: String
+  title: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type JobPosting {
+  company: Company!
+  createdAt: DateTime!
+  deadline: DateTime
+  description: String!
+  employmentType: String
+  id: ID!
+  isActive: Boolean!
+  location: String
+  salary: String
+  title: String!
+  updatedAt: DateTime!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Message {
+  chatRoom: ChatRoom!
+  content: String!
+  createdAt: DateTime!
+  id: ID!
+  user: User!
+}
+
+type Mutation {
+  createChatRoom(input: CreateChatRoomInput!): ChatRoom!
+  createCompany(input: CreateCompanyInput!): Company!
+  createJob(input: CreateJobInput!): JobPosting!
+  deleteChatRoom(id: ID!): Boolean!
+  login(input: LoginInput!): AuthPayload!
+  register(input: RegisterInput!): AuthPayload!
+  removeCompany(id: ID!): Boolean!
+  removeJob(id: ID!): Boolean!
+  sendMessage(input: SendMessageInput!): Message!
+  updateCompany(id: ID!, input: UpdateCompanyInput!): Company!
+  updateJob(id: ID!, input: UpdateJobInput!): JobPosting!
+}
+
+type Query {
+  chatRooms(companyId: ID): [ChatRoom!]!
+  companies: [Company!]!
+  company(id: ID!): Company!
+  job(id: ID!): JobPosting!
+  jobs(companyId: ID): [JobPosting!]!
+  me: User!
+  messages(chatRoomId: ID!): [Message!]!
+  users: [User!]!
+}
+
+input RegisterInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+input SendMessageInput {
+  chatRoomId: ID!
+  content: String!
+}
+
+input UpdateCompanyInput {
+  description: String
+  industry: String
+  logoUrl: String
+  name: String
+  website: String
+}
+
+input UpdateJobInput {
+  companyId: ID
+  deadline: DateTime
+  description: String
+  employmentType: String
+  location: String
+  salary: String
+  title: String
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  id: ID!
+  name: String!
+  profileImage: String
+  updatedAt: DateTime!
+}
