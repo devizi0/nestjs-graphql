@@ -30,6 +30,7 @@ import { Message } from './chat/entities/message.entity';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       context: ({ req }) => ({ req }),
+      includeStacktraceInErrorResponses: false,
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
