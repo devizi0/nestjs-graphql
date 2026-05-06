@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -17,7 +17,7 @@ export class CompaniesResolver {
   }
 
   @Query(() => Company)
-  company(@Args('id', { type: () => ID }) id: string) {
+  company(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
     return this.companiesService.findOne(id);
   }
 
@@ -31,7 +31,7 @@ export class CompaniesResolver {
   @Mutation(() => Company)
   updateCompany(
     @CurrentUser() user: User,
-    @Args('id', { type: () => ID }) id: string,
+    @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
     @Args('input') input: UpdateCompanyInput,
   ) {
     return this.companiesService.update(id, input, user.id);
@@ -39,7 +39,7 @@ export class CompaniesResolver {
 
   @UseGuards(JwtAuthGuard)
   @Mutation(() => Boolean)
-  removeCompany(@CurrentUser() user: User, @Args('id', { type: () => ID }) id: string) {
+  removeCompany(@CurrentUser() user: User, @Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
     return this.companiesService.remove(id, user.id);
   }
 }

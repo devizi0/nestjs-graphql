@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -19,7 +19,7 @@ export class ChatResolver {
 
   @Query(() => [Message])
   @UseGuards(JwtAuthGuard)
-  messages(@Args('chatRoomId', { type: () => ID }) chatRoomId: string) {
+  messages(@Args('chatRoomId', { type: () => ID }, ParseUUIDPipe) chatRoomId: string) {
     return this.chatService.getMessages(chatRoomId);
   }
 
@@ -31,7 +31,7 @@ export class ChatResolver {
 
   @UseGuards(JwtAuthGuard)
   @Mutation(() => Boolean)
-  deleteChatRoom(@CurrentUser() user: User, @Args('id', { type: () => ID }) id: string) {
+  deleteChatRoom(@CurrentUser() user: User, @Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
     return this.chatService.deleteRoom(id, user.id);
   }
 

@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -17,7 +17,7 @@ export class JobsResolver {
   }
 
   @Query(() => JobPosting)
-  job(@Args('id', { type: () => ID }) id: string) {
+  job(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
     return this.jobsService.findOne(id);
   }
 
@@ -31,7 +31,7 @@ export class JobsResolver {
   @Mutation(() => JobPosting)
   updateJob(
     @CurrentUser() user: User,
-    @Args('id', { type: () => ID }) id: string,
+    @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
     @Args('input') input: UpdateJobInput,
   ) {
     return this.jobsService.update(id, input, user.id);
@@ -39,7 +39,7 @@ export class JobsResolver {
 
   @UseGuards(JwtAuthGuard)
   @Mutation(() => Boolean)
-  removeJob(@CurrentUser() user: User, @Args('id', { type: () => ID }) id: string) {
+  removeJob(@CurrentUser() user: User, @Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
     return this.jobsService.remove(id, user.id);
   }
 }
